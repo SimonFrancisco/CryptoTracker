@@ -59,7 +59,8 @@ private fun CoinListScreenPreview() {
                 coins = (1..100).map {
                     previewCoin.copy(id = it.toString())
                 }
-            ), modifier = Modifier
+            ),
+            modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
         )
     }
