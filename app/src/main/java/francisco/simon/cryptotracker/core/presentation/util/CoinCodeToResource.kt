@@ -1,4 +1,4 @@
-package francisco.simon.cryptotracker.util
+package francisco.simon.cryptotracker.core.presentation.util
 
 import francisco.simon.cryptotracker.R
 

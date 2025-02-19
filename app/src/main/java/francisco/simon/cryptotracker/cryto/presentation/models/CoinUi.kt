@@ -1,8 +1,8 @@
 package francisco.simon.cryptotracker.cryto.presentation.models
 
 import androidx.annotation.DrawableRes
+import francisco.simon.cryptotracker.core.presentation.util.getDrawableIdForCoin
 import francisco.simon.cryptotracker.cryto.domain.Coin
-import francisco.simon.cryptotracker.util.getDrawableIdForCoin
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -36,10 +36,10 @@ fun Coin.toCoinUi(): CoinUi {
 }
 
 private fun Double.toDisplayableNumber(): DisplayableNumber {
-      val formatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
-          minimumFractionDigits = 2
-          maximumFractionDigits = 2
-      }
+    val formatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
+        minimumFractionDigits = 2
+        maximumFractionDigits = 2
+    }
     return DisplayableNumber(
         value = this,
         formatted = formatter.format(this)
