@@ -35,7 +35,7 @@ fun Coin.toCoinUi(): CoinUi {
     )
 }
 
-private fun Double.toDisplayableNumber(): DisplayableNumber {
+internal fun Double.toDisplayableNumber(): DisplayableNumber {
     val formatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
         minimumFractionDigits = 2
         maximumFractionDigits = 2
