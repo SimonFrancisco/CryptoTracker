@@ -4,7 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinsResponseDto(
-    @SerialName("data")
-    val data: List<CoinDto>
+data class CoinPriceDto(
+    @SerialName("priceUsd")
+    val priceUsd: Double,
+    @SerialName("time")
+    val dateTime: Long
 )

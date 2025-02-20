@@ -6,11 +6,17 @@ import francisco.simon.cryptotracker.core.domain.util.NetworkError
 import francisco.simon.cryptotracker.core.domain.util.Result
 import francisco.simon.cryptotracker.core.domain.util.map
 import francisco.simon.cryptotracker.cryto.data.mappers.toCoin
+import francisco.simon.cryptotracker.cryto.data.mappers.toCoinPrice
+import francisco.simon.cryptotracker.cryto.data.networking.dto.CoinHistoryDto
 import francisco.simon.cryptotracker.cryto.data.networking.dto.CoinsResponseDto
 import francisco.simon.cryptotracker.cryto.domain.Coin
 import francisco.simon.cryptotracker.cryto.domain.CoinDataSource
+import francisco.simon.cryptotracker.cryto.domain.CoinPrice
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class RemoteCoinDataSource(
     private val httpClient: HttpClient
@@ -24,6 +30,31 @@ class RemoteCoinDataSource(
             response.data.map {
                 it.toCoin()
             }
+        }
+    }
+
+    override suspend fun getCoinHistory(
+        coinId: String,
+        start: ZonedDateTime,
+        end: ZonedDateTime
+    ): Result<List<CoinPrice>, NetworkError> {
+        val startMillis = start.withZoneSameLocal(ZoneId.of("UTC"))
+            .toInstant().toEpochMilli()
+        val endMillis = end.withZoneSameLocal(ZoneId.of("UTC"))
+            .toInstant().toEpochMilli()
+        return safeCall<CoinHistoryDto> {
+            httpClient.get(
+                urlString = constructUrl("assets/$coinId/history")
+            ) {
+                parameter("interval", "h6")
+                parameter("start", startMillis)
+                parameter("end", endMillis)
+            }
+        }.map { response ->
+            response.data.map { coinPriceDto ->
+                coinPriceDto.toCoinPrice()
+            }
+
         }
     }
 }

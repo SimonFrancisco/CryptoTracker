@@ -1,0 +1,8 @@
+package francisco.simon.cryptotracker.cryto.domain
+
+import java.time.ZonedDateTime
+
+data class CoinPrice(
+    val priceUsd: Double,
+    val dateTime: ZonedDateTime
+)
