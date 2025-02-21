@@ -1,25 +1,15 @@
 package francisco.simon.cryptotracker
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import francisco.simon.cryptotracker.core.presentation.util.ObserveAsEvents
-import francisco.simon.cryptotracker.core.presentation.util.toString
-import francisco.simon.cryptotracker.cryto.presentation.coin_detail.CoinDetailScreen
-import francisco.simon.cryptotracker.cryto.presentation.coin_list.CoinListEvent
-import francisco.simon.cryptotracker.cryto.presentation.coin_list.CoinListViewModel
-import francisco.simon.cryptotracker.cryto.presentation.coin_list.components.CoinListScreen
+import francisco.simon.cryptotracker.core.navigation.AdaptiveCoinListDetailPane
 import francisco.simon.cryptotracker.ui.theme.CryptoTrackerTheme
-import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,36 +18,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             CryptoTrackerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val viewmodel = koinViewModel<CoinListViewModel>()
-                    val state by viewmodel.state.collectAsStateWithLifecycle()
-                    val context = LocalContext.current
-                    ObserveAsEvents(events = viewmodel.events) { event ->
-                        when (event) {
-                            is CoinListEvent.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    event.error.toString(context),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-                    when {
-                        state.selectedCoin != null -> {
-                            CoinDetailScreen(
-                                state = state,
-                                modifier = Modifier.padding(innerPadding)
-                            )
-                        }
+                    AdaptiveCoinListDetailPane(
+                        modifier = Modifier.padding(innerPadding)
+                    )
 
-                        else -> {
-                            CoinListScreen(
-                                state = state,
-                                modifier = Modifier.padding(innerPadding),
-                                onAction = viewmodel::onAction
-                            )
-                        }
-                    }
 
                 }
             }
